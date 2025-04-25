@@ -1,0 +1,154 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>Mapbox Example 14 - Legend</title>
+
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+
+<style>
+    
+    .legend{
+        background-color: #fff;
+        border-radius: 3px;
+        bottom: 30px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        font:
+            12px/20px 'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
+        padding: 10px;
+        position: absolute;
+        left: 10px;
+        z-index: 1;
+    }
+    .legend h4 {
+        margin: 0 0 10px;
+    }
+
+    .legend div span {
+        border-radius: 50%;
+        display: inline-block;
+        height: 10px;
+        margin-left: 5px;
+        width: 10px;
+    }
+    .map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 380px;
+    min-width: 380px;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    }
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .map-overlay h2 {
+        line-height: 24px;
+        display: block;
+        margin: 0 0 10px;
+    }
+    .map-overlay p.credit {
+       margin: 0;
+       padding: 0;
+    }
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+    <div class='map-overlay'> 
+    <div class='map-overlay-inner'>
+        <h2> Denver Tree Inventory</h2>
+        <p class="credit"> This map visualizes the top 10 tree genera in Denver including Maple, Honeylocust, Crabapple, Oak, Elm, Pine, Ash, Hackberry and Spruce. It is created using the <a href="https://data.colorado.gov/Environment/Map-of-Tree-Inventory-Denver/hzmx-2dfk"> Denver Tree Inventory data </a>. </p>
+        </div>
+    </div>
+<div id="treecolor-legend" class="legend" style="display: none">
+    <h4>Tree Genus</h4>
+    <div><span style="background-color: #e6200b"></span>Maple</div>
+    <div><span style="background-color: #fac467"></span>Honeylocust</div>
+    <div><span style="background-color: #80392a"></span>Crabapple</div>
+    <div><span style="background-color: #d8b589"></span>Oak</div>
+    <div><span style="background-color: #1e656d"></span>Elm</div>
+    <div><span style="background-color: #2b5d34"></span>Pine</div>
+    <div><span style="background-color: #b2beb5"></span>Ash</div>
+    <div><span style="background-color: #6b2e57"></span>Hackberry</div>
+    <div><span style="background-color: #7fffd4"></span>Spruce</div>
+    <div><span style="background-color: #ffff99"></span>Others</div>
+</div>    
+
+<script>
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYWxvbmd3ZWwiLCJhIjoiY204NHN3ZzluMjNlbjJqb2t6OGpxNGpidSJ9.X65zzzX-VlD3PKJjk7AkEg';  
+
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/alongwel/cm9u324ux00qj01soa3w5gwr4', 
+            center: [-104.951046, 39.732470],
+            zoom: 12
+        });
+
+        map.on('load', function() {
+ 
+            map.addLayer({
+                'id':'denver_tree_point',
+                'type':'circle',
+                'source':{
+                    type:'vector',
+                    url:'mapbox://alongwel.603ayl6k'
+                },
+                'source-layer':'denver_tree_top_10_genus-08tngu',
+                'layout':{
+                    'visibility': 'visible'
+                },
+                'paint': {
+                    'circle-color':[
+                        'match',
+                        ['get','genus'],
+                        'Linden', '#a8c58d',
+                        'Maple', '#e6200b',
+                        'Honeylocust', '#fac467',
+                        'Carbapple', '#80392a',
+                        'Oak', '#d8b589',
+                        'Elm', '#1e656d',
+                        'Pine', '#2b5d34',
+                        'Ash', '#b2beb5',
+                        'Hackberry', '#6b2e57',
+                        'Spruce', '#7fffd4',
+                        '#ffff99',
+                        ],
+                    'circle-opacity':1,
+                    'circle-stroke-width':0.5,
+                    'circle-stroke-color':'white',          
+                    'circle-stroke-opacity':0.5,
+                    'circle-radius':{
+                        'base':1.75,
+                        'stops': [
+                            [12, 2],
+                            [22, 150]
+                        ]
+                    }
+                }
+            });
+            
+            const TreeColorLegend = document.getElementById('treecolor-legend');
+            TreeColorLegend.style.display = 'block';
+
+        })
+
+</script>
+
+</body>
+</html>
